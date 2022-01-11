@@ -1,0 +1,27 @@
+@startuml
+'!include <C4/C4_Container>
+!include <C4/C4_Component>
+
+'LAYOUT_WITH_LEGEND()
+
+'title Layered Architecture
+
+Person(ui, "entrypoint")
+Component(domain, "Aggregate Root", "Domain", "Domain Layer")
+ComponentDb(db, "Data Store", "DB", "Persistence")
+
+Boundary(service, "Service Layer") {
+    Container(use_cases, "Use Cases", "Services", "Service Layer")
+    Container(uow, "UoW", "Unit of Work", "Service Layer")
+}
+Component(repo, "Repository", "", "Adapter Layer")
+
+Rel(ui, use_cases, "Call")
+Rel_R(use_cases, uow, "Use")
+Rel(use_cases, domain, "Use")
+Rel(uow, repo, "Manages")
+Rel_R(repo, db, "Fetch from")
+Rel_L(repo, domain, "Returns")
+
+
+@enduml
